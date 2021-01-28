@@ -1,0 +1,3 @@
+﻿  Injector.cpp
+Injector.obj : error LNK2019: unresolved external symbol __imp__PathRemoveFileSpecW@4 referenced in function _main
+C:\Users\david\source\repos\HookLand\Debug\Injector.exe : fatal error LNK1120: 1 unresolved externals

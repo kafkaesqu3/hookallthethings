@@ -1,0 +1,29 @@
+﻿  Injector2.c
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(22,18): warning C4090: 'function': different 'const' qualifiers
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(22,2): warning C4996: 'wcstombs': This function or variable may be unsafe. Consider using wcstombs_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(82,12): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'WCHAR *'
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(82,12): message : consider using '%ls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(82,12): message : consider using '%lls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(82,12): message : consider using '%Ls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(82,12): message : consider using '%ws' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(90,9): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'WCHAR *'
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(90,9): message : consider using '%ls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(90,9): message : consider using '%lls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(90,9): message : consider using '%Ls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(90,9): message : consider using '%ws' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(51,8): warning C4101: 'dwPriorityClass': unreferenced local variable
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(131,65): warning C4047: 'function': 'SIZE_T' differs in levels of indirection from 'void *'
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(131,61): warning C4024: 'CreateRemoteThread': different types for formal and actual parameter 3
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(131,145): warning C4047: 'function': 'DWORD' differs in levels of indirection from 'void *'
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(131,141): warning C4024: 'CreateRemoteThread': different types for formal and actual parameter 6
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(166,9): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'TCHAR *'
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(166,9): message : consider using '%ls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(166,9): message : consider using '%lls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(166,9): message : consider using '%Ls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(166,9): message : consider using '%ws' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(166,9): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 3 has type 'TCHAR *'
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(166,9): message : consider using '%ls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(166,9): message : consider using '%lls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(166,9): message : consider using '%Ls' in the format string
+C:\Users\david\source\repos\HookLand\Injector2\Injector2.c(166,9): message : consider using '%ws' in the format string
+  Injector2.vcxproj -> C:\Users\david\source\repos\HookLand\x64\Debug\Injector2.exe

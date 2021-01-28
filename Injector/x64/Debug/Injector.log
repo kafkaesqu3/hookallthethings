@@ -1,0 +1,3 @@
+﻿  Injector.cpp
+C:\Users\david\source\repos\HookLand\Injector\Injector.cpp(284,13): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 1 has type 'LPVOID'
+  Injector.vcxproj -> C:\Users\david\source\repos\HookLand\x64\Debug\Injector.exe

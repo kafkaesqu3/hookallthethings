@@ -1,0 +1,6 @@
+﻿  EzHook2.cpp
+C:\Users\david\source\repos\HookLand\packages\EasyHookNativePackage.2.7.7097\build\native\include\easyhook.h(39,1): warning C4005: 'NTDDI_VERSION': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\sdkddkver.h(227): message : see previous definition of 'NTDDI_VERSION'
+C:\Users\david\source\repos\HookLand\packages\EasyHookNativePackage.2.7.7097\build\native\include\easyhook.h(40,1): warning C4005: '_WIN32_WINNT': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\sdkddkver.h(217): message : see previous definition of '_WIN32_WINNT'
+  EzHook2.vcxproj -> C:\Users\david\source\repos\HookLand\x64\Debug\EzHook2.exe

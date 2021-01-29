@@ -21,7 +21,7 @@ int main()
     
 
     //get DLL to inject and name of exe to inject into
-    std::wstring dllPath = std::wstring(selfdir) + TEXT("\\hooks.dll");
+    std::wstring dllPath = std::wstring(selfdir) + TEXT("\\EZhook.dll");
     std::wstring targetPath = std::wstring(selfdir) + TEXT("\\target.exe");
 
     //start target exe, inject DLL
@@ -32,7 +32,7 @@ int main()
     //    printf("Terminating the Injector app...");
     //}
 
-    dllPath = std::wstring(selfdir) + TEXT("\\InjectMe2.dll");
+    dllPath = std::wstring(selfdir) + TEXT("\\EZhook.dll");
     targetPath = TEXT("notepad.exe");
 
     if (InjectDllInExistingProc(dllPath.c_str(), targetPath.c_str())) {
@@ -136,19 +136,7 @@ LPVOID WINAPI InjectDLL(__in HANDLE hProcess, __in LPCWSTR lpcwszDll) {
         PrintError(TEXT("CreateRemoteThread"));
     }
     else {
-        WaitForSingleObject(hThread, 4000);
-
-        DWORD dwExitCode = 0;
-        GetExitCodeThread(hThread, &dwExitCode);
-        if (dwExitCode == 0)
-        {
-            PrintError(_T("Error: LoadLibraryA failed."));
-        }
-        else
-        {
-            OutputDebugString(_T("Success: the remote thread was successfully created.\n"));
-        }
-        
+        WaitForSingleObject(hThread, 4000);        
     }
     //  free allocated memory
     VirtualFreeEx(hProcess, lpRemoteString, 0, MEM_RELEASE);

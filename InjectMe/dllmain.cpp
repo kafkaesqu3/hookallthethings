@@ -10,7 +10,8 @@ BOOL(WINAPI* True_WriteFile)(HANDLE, LPCVOID, DWORD, LPDWORD, LPOVERLAPPED) = Wr
 BOOL WINAPI HookedWriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped)
 {
     const char* pBuf = "Hijacked";
-    return True_WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped);
+    DWORD bufsize = sizeof(pBuf);
+    return True_WriteFile(hFile, pBuf, bufsize, lpNumberOfBytesWritten, lpOverlapped);
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule,

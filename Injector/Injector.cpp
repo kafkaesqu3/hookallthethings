@@ -33,7 +33,7 @@ int main()
     //}
 
     dllPath = std::wstring(selfdir) + TEXT("\\EZhook.dll");
-    targetPath = TEXT("notepad.exe");
+    targetPath = TEXT("target.exe");
 
     if (InjectDllInExistingProc(dllPath.c_str(), targetPath.c_str())) {
         printf("Dll was successfully injected.\n");

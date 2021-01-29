@@ -10,10 +10,10 @@
 #include <Shlwapi.h>
 #include <TlHelp32.h>
 #include <strsafe.h>
-#include <easyhook.h>
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <easyhook.h>
 
 
 
@@ -50,7 +50,7 @@ DWORD WINAPI GetProcPID(__in LPCWSTR targetExecutable) {
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	DWORD processId = GetProcPID(TEXT("notepad.exe"));
+	DWORD processId = GetProcPID(TEXT("Target.exe"));
 	
 	wchar_t selfdir[MAX_PATH] = { 0 };
 
@@ -63,7 +63,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//get DLL to inject and name of exe to inject into
 	std::wstring dllToInject = std::wstring(selfdir) + TEXT("\\EZhook.dll");
 
-	wprintf(L"Attempting to inject: %s\n\n", dllToInject);
+	std::wcout << "Attempting to inject: " << dllToInject << "\n\n";
 
 	// Inject dllToInject into the target process Id, passing 
 	// freqOffset as the pass through data.

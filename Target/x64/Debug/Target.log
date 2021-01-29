@@ -1,4 +1,5 @@
 ﻿  Target.cpp
-C:\Users\david\source\repos\HookLand\Target\Target.cpp(61,73): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
-C:\Users\david\source\repos\HookLand\Target\Target.cpp(42): warning C4715: 'StartProc': not all control paths return a value
+C:\Users\david\source\repos\HookLand\Target\Target.cpp(17,13): warning C4101: 'dwThreadId': unreferenced local variable
+C:\Users\david\source\repos\HookLand\Target\Target.cpp(89,73): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
+C:\Users\david\source\repos\HookLand\Target\Target.cpp(70): warning C4715: 'StartProc': not all control paths return a value
   Target.vcxproj -> C:\Users\david\source\repos\HookLand\x64\Debug\Target.exe

@@ -7,6 +7,34 @@
 #include <strsafe.h>
 #include <stdio.h>
 
+DWORD WINAPI MyThreadFunction(LPVOID lpParam);
+int StartProc(LPTSTR procname);
+int WriteFile(LPTSTR filename);
+
+int main()
+{
+    //start a thread to do nothing
+    LPDWORD dwThreadId;
+    //HANDLE hThread = CreateThread(NULL, 0, MyThreadFunction, NULL, 0, dwThreadId);
+
+
+    std::wcout << "Press Enter to write to the file";
+    getchar();
+    WriteFile(_T("C:\\users\\david\\file.txt"));
+
+    std::wcout << "Done";
+
+
+    //WaitForSingleObject(hThread, INFINITE);
+    //std::wcout << "Press Enter to start the process";
+    //getchar();
+
+    //StartProc(_T("C:\\windows\\system32\\calc.exe"));
+
+
+}
+
+
 int StartProc(LPTSTR procname) {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
@@ -68,19 +96,11 @@ int WriteFile(LPTSTR filename) {
     return 0;
 }
 
-int main()
+DWORD WINAPI MyThreadFunction(LPVOID lpParam)
 {
-    
-    //std::wcout << "Press Enter to do the thing";
-    //getchar();
-    //WriteFile(_T("C:\\users\\david\\file.txt"));
+    while (true) {
+        Sleep(5000);
+    }
 
-    //std::wcout << "Done";
-
-    std::wcout << "Press Enter to do the thing";
-    getchar();
-
-    StartProc(_T("C:\\windows\\system32\\calc.exe"));
-
-    
+    return 0;
 }

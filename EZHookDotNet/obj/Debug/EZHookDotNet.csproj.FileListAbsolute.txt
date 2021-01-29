@@ -1,0 +1,9 @@
+C:\Users\david\source\repos\HookLand\EZHookDotNet\bin\Debug\EZHookDotNet.dll
+C:\Users\david\source\repos\HookLand\EZHookDotNet\bin\Debug\EZHookDotNet.pdb
+C:\Users\david\source\repos\HookLand\EZHookDotNet\bin\Debug\EasyHook.dll
+C:\Users\david\source\repos\HookLand\EZHookDotNet\bin\Debug\EasyHook.xml
+C:\Users\david\source\repos\HookLand\EZHookDotNet\obj\Debug\EZHookDotNet.csprojAssemblyReference.cache
+C:\Users\david\source\repos\HookLand\EZHookDotNet\obj\Debug\EZHookDotNet.csproj.CoreCompileInputs.cache
+C:\Users\david\source\repos\HookLand\EZHookDotNet\obj\Debug\EZHookDotNet.csproj.CopyComplete
+C:\Users\david\source\repos\HookLand\EZHookDotNet\obj\Debug\EZHookDotNet.dll
+C:\Users\david\source\repos\HookLand\EZHookDotNet\obj\Debug\EZHookDotNet.pdb

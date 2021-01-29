@@ -18,7 +18,8 @@ BOOL WINAPI WriteFileHook(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesTo
 BOOL WINAPI CreateProcessHook(LPCTSTR lpApplicationName, LPSTR lpCommandLine, LPSECURITY_ATTRIBUTES lpProcessAttributes, LPSECURITY_ATTRIBUTES lpThreadAttributes, BOOL                  bInheritHandles, DWORD dwCreationFlags, LPVOID lpEnvironment, LPCTSTR lpCurrentDirectory, LPSTARTUPINFO lpStartupInfo, LPPROCESS_INFORMATION lpProcessInformation);
 BOOL WINAPI WriteFileHook(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped) {
     const char* pBuf = "Hooked";
-    return WriteFile(hFile, pBuf, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped);
+    DWORD buflen = sizeof(pBuf);
+    return WriteFile(hFile, pBuf, buflen, lpNumberOfBytesWritten, lpOverlapped);
 }
 
 int WriteToFile(LPTSTR filename, const char* text) {
@@ -61,7 +62,7 @@ BOOL WINAPI CreateProcessHook(LPCTSTR lpApplicationName,
 
     LPTSTR filename = _T("C:\\users\\david\\CreateProcess.log");
     ostringstream out;
-    out << "CreateProcess: " << lpApplicationName << ", " << lpCommandLine << "\n";
+    out << "CreateProcess: " << lpApplicationName << ", " << lpCommandLine << "...";
     WriteToFile(filename, out.str().c_str());
 
     return CreateProcessHook(lpApplicationName,
@@ -79,12 +80,12 @@ BOOL WINAPI CreateProcessHook(LPCTSTR lpApplicationName,
 }
 
 BOOL DoWriteFileHooks(REMOTE_ENTRY_INFO* inRemoteInfo) {
-    std::cout << "Injected by process Id: " << inRemoteInfo->HostPID << "\n";
+    std::cout << "Injected by process Id: " << inRemoteInfo->HostPID << "...";
 
     // Perform hooking
     HOOK_TRACE_INFO hHook = { NULL }; // keep track of our hook
     LPVOID RealWriteFile = GetProcAddress(GetModuleHandle(TEXT("kernel32")), "WriteFile");
-    std::cout << "WriteFile found at address: " << RealWriteFile << "\n";
+    std::cout << "WriteFile found at address: " << RealWriteFile << "...";
 
     // Install the hook
     NTSTATUS result = LhInstallHook(
@@ -110,16 +111,16 @@ BOOL DoWriteFileHooks(REMOTE_ENTRY_INFO* inRemoteInfo) {
     // Disable the hook for the provided threadIds, enable for all others
     LhSetExclusiveACL(ACLEntries, 1, &hHook);
 
-    return;
+    return true;
 }
 
 BOOL DoCreateProcessHooks(REMOTE_ENTRY_INFO* inRemoteInfo) {
-    std::cout << "Injected by process Id: " << inRemoteInfo->HostPID << "\n";
+    std::cout << "Injected by process Id: " << inRemoteInfo->HostPID << "...";
 
     // Perform hooking
     HOOK_TRACE_INFO hHook = { NULL }; // keep track of our hook
     LPVOID RealCreateProcess = GetProcAddress(GetModuleHandle(TEXT("kernel32")), "CreateProcess");
-    std::cout << "CreateProcess found at address: " << RealCreateProcess << "\n";
+    std::cout << "CreateProcess found at address: " << RealCreateProcess << "...";
 
     // Install the hook
     NTSTATUS result = LhInstallHook(
@@ -145,14 +146,14 @@ BOOL DoCreateProcessHooks(REMOTE_ENTRY_INFO* inRemoteInfo) {
     // Disable the hook for the provided threadIds, enable for all others
     LhSetExclusiveACL(ACLEntries, 1, &hHook);
 
-    return;
+    return true;
 }
 
 extern "C" void __declspec(dllexport) __stdcall NativeInjectionEntryPoint(REMOTE_ENTRY_INFO * inRemoteInfo);
 
 void __stdcall NativeInjectionEntryPoint(REMOTE_ENTRY_INFO* inRemoteInfo)
 {
-    DoCreateProcessHooks(inRemoteInfo);
+    DoWriteFileHooks(inRemoteInfo);
 
     
 }

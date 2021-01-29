@@ -65,8 +65,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	std::wcout << "Attempting to inject: " << dllToInject << "\n\n";
 
-	// Inject dllToInject into the target process Id, passing 
-	// freqOffset as the pass through data.
+	// Inject dllToInject into the target process Id 
 	NTSTATUS nt = RhInjectLibrary(
 		processId,   // The process to inject into
 		0,           // ThreadId to wake up upon injection
@@ -88,8 +87,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		std::wcout << L"Library injected successfully.\n";
 	}
 
-	std::wcout << "Press Enter to exit";
-	std::wstring input;
-	std::getline(std::wcin, input);
+	//std::wcout << "Press Enter to exit";
+	//std::wstring input;
+	//std::getline(std::wcin, input);
 	return 0;
 }

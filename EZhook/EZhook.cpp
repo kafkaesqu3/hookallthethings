@@ -5,6 +5,7 @@
 #include <easyhook.h>
 #include <tchar.h>
 #include <sstream>
+#include <strsafe.h>
 
 #if _WIN64
 #pragma comment(lib, "EasyHook64.lib")
@@ -15,19 +16,20 @@
 using namespace std;
 
 BOOL WINAPI WriteFileHook(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped);
-BOOL WINAPI CreateProcessHook(LPCTSTR lpApplicationName, LPSTR lpCommandLine, LPSECURITY_ATTRIBUTES lpProcessAttributes, LPSECURITY_ATTRIBUTES lpThreadAttributes, BOOL                  bInheritHandles, DWORD dwCreationFlags, LPVOID lpEnvironment, LPCTSTR lpCurrentDirectory, LPSTARTUPINFO lpStartupInfo, LPPROCESS_INFORMATION lpProcessInformation);
+BOOL WINAPI CreateProcessWHook(LPCWSTR lpApplicationName, LPWSTR lpCommandLine, LPSECURITY_ATTRIBUTES lpProcessAttributes, LPSECURITY_ATTRIBUTES lpThreadAttributes, BOOL                  bInheritHandles, DWORD dwCreationFlags, LPVOID lpEnvironment, LPCTSTR lpCurrentDirectory, LPSTARTUPINFOW lpStartupInfo, LPPROCESS_INFORMATION lpProcessInformation);
+void PrintError(LPTSTR lpszFunction);
 BOOL WINAPI WriteFileHook(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped) {
     const char* pBuf = "Hooked";
     DWORD buflen = sizeof(pBuf);
     return WriteFile(hFile, pBuf, buflen, lpNumberOfBytesWritten, lpOverlapped);
 }
 
-int WriteToFile(LPTSTR filename, const char* text) {
+int WriteToFile(LPWSTR filename, const wchar_t* text) {
     HANDLE hFile = CreateFile(filename,                // name of the write
-        GENERIC_WRITE,          // open for writing
+        FILE_APPEND_DATA,          // open for writing
         0,                      // do not share
         NULL,                   // default security
-        OPEN_EXISTING | FILE_APPEND_DATA,             // create new file only
+        FILE_APPEND_DATA,             // create new file only
         FILE_ATTRIBUTE_NORMAL,  // normal file
         NULL);                  // no attr. template
 
@@ -38,7 +40,7 @@ int WriteToFile(LPTSTR filename, const char* text) {
     }
 
     DWORD bytesWritten;
-    bool result = WriteFile(hFile, text, strlen(text), &bytesWritten, NULL);
+    bool result = WriteFile(hFile, text, wcslen(text) * sizeof(wchar_t), &bytesWritten, NULL);
     if (!result) {
         std::wcout << "Err: WriteFile";
         CloseHandle(hFile);
@@ -49,23 +51,25 @@ int WriteToFile(LPTSTR filename, const char* text) {
 }
 
 
-BOOL WINAPI CreateProcessHook(LPCTSTR lpApplicationName,
-    LPSTR lpCommandLine,
+BOOL WINAPI CreateProcessWHook(LPCWSTR lpApplicationName,
+    LPWSTR lpCommandLine,
     LPSECURITY_ATTRIBUTES lpProcessAttributes,
     LPSECURITY_ATTRIBUTES lpThreadAttributes,
     BOOL bInheritHandles,
     DWORD dwCreationFlags,
     LPVOID lpEnvironment,
     LPCTSTR lpCurrentDirectory,
-    LPSTARTUPINFO lpStartupInfo,
+    LPSTARTUPINFOW lpStartupInfo,
     LPPROCESS_INFORMATION lpProcessInformation) {
 
-    LPTSTR filename = _T("C:\\users\\david\\CreateProcess.log");
-    ostringstream out;
-    out << "CreateProcess: " << lpApplicationName << ", " << lpCommandLine << "...";
-    WriteToFile(filename, out.str().c_str());
+    LPWSTR filename = L"C:\\users\\david\\CreateProcess.log";
+    wstringstream out;
+    wstringstream wout;
+    wout << "CreateProcessW: " << lpCommandLine << endl;
+    wchar_t* outstring = _wcsdup(wout.str().c_str());
+    WriteToFile(filename, outstring);
 
-    return CreateProcessHook(lpApplicationName,
+    return CreateProcessW(lpApplicationName,
         lpCommandLine,
         lpProcessAttributes,
         lpThreadAttributes,
@@ -119,24 +123,34 @@ BOOL DoCreateProcessHooks(REMOTE_ENTRY_INFO* inRemoteInfo) {
 
     // Perform hooking
     HOOK_TRACE_INFO hHook = { NULL }; // keep track of our hook
-    LPVOID RealCreateProcess = GetProcAddress(GetModuleHandle(TEXT("kernel32")), "CreateProcess");
-    std::cout << "CreateProcess found at address: " << RealCreateProcess << "...";
+    
+    HMODULE hCreateProc = GetModuleHandle(TEXT("kernel32"));
+    if (!hCreateProc) {
+        PrintError(_T("GetModuleHandle"));
+    }
+
+    LPVOID RealCreateProcessW = GetProcAddress(hCreateProc, "CreateProcessW");
+    if (RealCreateProcessW == NULL) {
+        PrintError(_T("GetProcAddress"));
+    }
+
+    std::cout << "CreateProcessW found at address: " << RealCreateProcessW << "...";
 
     // Install the hook
     NTSTATUS result = LhInstallHook(
-        RealCreateProcess,
-        CreateProcessHook,
+        RealCreateProcessW,
+        CreateProcessWHook,
         NULL,
         &hHook);
     if (FAILED(result))
     {
         std::wstring s(RtlGetLastErrorString());
         std::wcout << "Failed to install hook: ";
-        std::wcout << s;
+        std::wcout << s << "...";
     }
     else
     {
-        std::cout << "Hook 'CreateProcessHook installed successfully.";
+        std::cout << "Hook 'CreateProcessHook installed successfully...";
     }
 
     // If the threadId in the ACL is set to 0,
@@ -153,7 +167,41 @@ extern "C" void __declspec(dllexport) __stdcall NativeInjectionEntryPoint(REMOTE
 
 void __stdcall NativeInjectionEntryPoint(REMOTE_ENTRY_INFO* inRemoteInfo)
 {
-    DoWriteFileHooks(inRemoteInfo);
-
+    //DoWriteFileHooks(inRemoteInfo);
+    DoCreateProcessHooks(inRemoteInfo);
     
+}
+
+
+void PrintError(LPTSTR lpszFunction)
+{
+    // Retrieve the system error message for the last-error code
+
+    LPVOID lpMsgBuf;
+    LPVOID lpDisplayBuf;
+    DWORD dw = GetLastError();
+
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        dw,
+        MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
+        (LPTSTR)&lpMsgBuf,
+        0, NULL);
+
+    // Display the error message
+
+    lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT,
+        (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR));
+    StringCchPrintf((LPTSTR)lpDisplayBuf,
+        LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+        TEXT("%s failed with error %d: %s"),
+        lpszFunction, dw, lpMsgBuf);
+
+    wprintf(L"%s", lpDisplayBuf);
+
+    LocalFree(lpMsgBuf);
+    LocalFree(lpDisplayBuf);
 }
